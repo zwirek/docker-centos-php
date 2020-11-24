@@ -1,12 +1,8 @@
-FROM zwirek/php:base
+FROM zwirek/php:php-74-latest
 
-RUN dnf module reset php -y \
-    && dnf module enable php:remi-7.4 -y \
-    && dnf install php php-cli php-intl php-json php-mbstring php-mysqlnd php-pdo php-process php-xml php-pecl-rdkafka -y
+RUN dnf install php-pecl-xdebug vim -y
 RUN dnf clean all
 
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-    && rm composer-setup.php
+COPY xdebug.ini /etc/php.d/15-xdebug.ini
 
 CMD ["tail", "-f", "/dev/null"]
